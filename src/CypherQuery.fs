@@ -196,7 +196,7 @@ module Cypher =
             RuntimeError (CypherQueryText cypher.Query.QueryText, error)
             |> Error
 
-    let private dumpQuery log { Cypher = cypher } =
+    let private dumpQuery { LogQuery = log } { Cypher = cypher } =
         let parameters =
             cypher.Query.QueryParameters
             |> Seq.map (fun kvPair -> sprintf "  - {%s} => %s" kvPair.Key (kvPair.Value |> Json.serialize))
@@ -206,13 +206,13 @@ module Cypher =
 
     let rec dump log client = function
         | Cypher.RawQuery query -> query |> dumpQuery log
-        | Cypher.Composition composition -> client |> RawCypherQuery.start (OutputOnly { LogQuery = log; LogMessage = ignore }) |> composition |> dumpQuery log
+        | Cypher.Composition composition -> client |> RawCypherQuery.start (OutputOnly log) |> composition |> dumpQuery log
         | Cypher.Multi multi -> multi |> List.iter (dump log client)
 
-    let rec execute onEach log client = (tee onEach) >> function
+    let rec execute onEach client = (tee onEach) >> function
         | Cypher.RawQuery query -> query |> executeQuery
         | Cypher.Composition composition -> client |> RawCypherQuery.start Execute |> composition |> executeQuery
-        | Cypher.Multi multi -> multi |> List.map (execute onEach log client) |> Result.sequence <!> ignore
+        | Cypher.Multi multi -> multi |> List.map (execute onEach client) |> Result.sequence <!> ignore
 
     let fromNode node =
         node
