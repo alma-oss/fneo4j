@@ -1,0 +1,8 @@
+[
+    {
+        "userName": "neo4j",
+        "password": "heslo",
+        "host": "localhost",
+        "port": 7474
+    }
+]
