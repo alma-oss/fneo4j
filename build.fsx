@@ -197,6 +197,8 @@ Target.create "Tests" (fun _ ->
 Target.create "Release" (fun _ ->
     DotnetCore.runInRootOrFail "pack"
 
+    Directory.ensure "release"
+
     !! "**/bin/**/*.nupkg"
     |> Seq.iter (Shell.moveFile "release")
 )

@@ -186,3 +186,31 @@ module Link =
             (link.Type |> LinkType.value)
             (link.Attributes |> Attributes.format)
             (link.To.Id |> NodeId.value)
+
+    module Operators =
+        type PartialLink<'Value> = private {
+            From: GraphQueryNode<'Value>
+            Type: string
+            Attributes: Attributes
+        }
+
+        /// Start link
+        let (-|) fromNode linkType =
+            {
+                From = fromNode
+                Type = linkType
+                Attributes = Attributes.empty
+            }
+
+        /// Add attributes to link
+        let (&>) (partialLink: PartialLink<_>) attributes =
+            { partialLink with Attributes = partialLink.Attributes + Attributes.from attributes }
+
+        /// Finish link
+        let (|->) partialLink toNode =
+            {
+                From = partialLink.From |> GraphQueryNode.forLink
+                Type = LinkType.create partialLink.Type
+                Attributes = partialLink.Attributes
+                To = toNode |> GraphQueryNode.forLink
+            }
