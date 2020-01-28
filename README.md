@@ -16,6 +16,8 @@ type Node () =
         and set (value) = nameValue <- value
 ```
 
+There are some basic DTOs prepared [here](https://bitbucket.lmc.cz/projects/ARCHI/repos/fneo4j/browse/src/Dto.fs).
+
 ### Fetching
 
 Single node
@@ -35,7 +37,68 @@ let fetchAllWithClient (client: ConnectedClient) =
     |> Seq.toList
 ```
 
+Single node with functions
+```fs
+let simpleExample (client: Client.Connected): Async<string list> =
+    client.Cypher
+    |> matchText "(m:MOVIE)"
+    |> fetchResults<string> id
+```
+
+```fs
+let exampleOfMatchNode (client: Client.Connected): Async<string list> =
+    let id = NodeId.ofString "m"
+    let movieType = NodeType.create "movie"
+
+    client.Cypher
+    |> matchNode movieType id
+    |> fetchResults<string> id
+```
+
+```fs
+open CypherFluentQuery.NodeOperators
+
+let exampleOfMatchWithOperators (client: Client.Connected): Async<string list> =
+    let id = NodeId.ofString "m"
+    let movieType = NodeType.create "movie"
+
+    client.Cypher
+    |> matchText (id @ movieType)
+    |> fetchResults<string> id
+```
+
+```fs
+open CypherFluentQuery.NodeOperators
+
+let exampleOfMatchWithOperatorsAndParameters (client: Client.Connected): Async<string list> =
+    let nodeId = NodeId.ofString "m"
+    let movieType = NodeType.create "movie"
+
+    client.Cypher
+    |> matchText (
+        (nodeId @<*> movieType) (Name.Property => "Reservoir Dogs")
+    )
+    |> fetchResults<string> nodeId
+```
+
+```fs
+open CypherFluentQuery.NodeOperators
+
+let exampleOfMatchWithOperatorsAndParametersTypeSafe (client: Client.Connected): Async<string list> =
+    let nodeId = NodeId.ofString "m"
+    let movieType = NodeType.create "movie"
+    let movieName = Name.ofString "Reservoir Dogs"
+
+    client.Cypher
+    |> matchText (
+        (nodeId @<*> movieType) (Name.Property => (movieName |> Name.value))
+    )
+    |> fetchResults<string> nodeId
+```
+
 More nodes
+> It also _partially_ allows to use a functions shown above.
+
 ```fs
 let fetchAllWithClient (client: ConnectedClient) =
     client.Cypher
@@ -75,3 +138,29 @@ let createLink (client: ConnectedClient) =
 
         .ExecuteWithoutResults()
 ```
+
+## CypherFluentQuery
+> This module is an abstraction above a `Neo4jClient.Cypher.ICypherFluentQuery`, which adds some functions and operators to allow functional approach
+
+### Operators
+
+Let's use following code _globally_ for sake of simple examples.
+```fs
+let client: Client.Connected = ...
+let cypher = client.Cypher
+
+let nodeId = NodeId.ofString "m"
+let nodeType = NodeType.ofString "movie"
+let movieName = Name.ofString "Reservoir Dogs"
+
+let nameValue = movieName |> Name.value
+
+let namePlaceholder = Placeholder.withId nodeId "name"
+```
+
+| Operator | Usage                                                        | Cypher Result                           | Note |
+| ---      | ---                                                          | ---                                     | ---  |
+| `@`      | `nodeId @ nodeType`                                          | `(m:MOVIE)`                             | - |
+| `@<*>`   | `(nodeId @<*> nodeType) (Name.Property => nameValue)`        | `(m:MOVIE { Name: "Reservoir Dogs" })`  | - |
+| `@<?>`   | `(nodeId @<?> nodeType) (Name.Property => namePlaceholder)`  | `(m:MOVIE { Name: { mname } })`         | You must set a placeholder value (see `<?=>`) |
+| `<?=>`   | `cypher <?=> (namePlaceholder => nameValue)`                 | -                                       | It is used to set a parameter value. |

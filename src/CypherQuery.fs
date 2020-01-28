@@ -58,15 +58,14 @@ module RawCypherQuery =
 module CypherFluentQuery =
     open Option.Operators
 
-    [<AutoOpen>]
-    module private NodeOperators =
-        /// Node with: (name:TYPE)
+    module NodeOperators =
+        /// Node with: (nodeId:TYPE)
         let (@) nodeId nodeType =
             sprintf "(%s:%s)"
                 (nodeId |> NodeId.value)
                 (nodeType |> NodeType.value)
 
-        /// Node with: (name:TYPE { Parameter: "value" })
+        /// Node with: (nodeId:TYPE { Field: "value" })
         let (@<*>) nodeId nodeType (field, value) =
             sprintf "(%s:%s { %s: \"%s\" })"
                 (nodeId |> NodeId.value)
@@ -74,8 +73,8 @@ module CypherFluentQuery =
                 (field |> PropertyName.value)
                 value
 
-        /// Node with: (name:TYPE { Parameter: {placeholder} })
-        /// You must set placeholder value to the query.
+        /// Node with: (nodeId:TYPE { Field: {placeholder} })
+        /// You must set placeholder value to the query -> see (<?=>) below
         let (@<?>) nodeId nodeType (field, placeholder) =
             sprintf "(%s:%s { %s: {%s} })"
                 (nodeId |> NodeId.value)
@@ -83,13 +82,24 @@ module CypherFluentQuery =
                 (field |> PropertyName.value)
                 (placeholder |> Placeholder.value)
 
-        /// Node with: (name:TYPE {placeholder} ) - this is used for creates
-        /// You must set placeholder value to the query.
-        let (@<+>) nodeId nodeType placeholder =
-            sprintf "(%s:%s {%s} )"
-                (nodeId |> NodeId.value)
-                (nodeType |> NodeType.value)
-                (placeholder |> Placeholder.value)
+        /// Add parameter value for placeholder to cypher query.
+        let (<?=>) (cypher: CypherFluentQuery) (placeholder, value: obj) =
+            cypher.WithParam(placeholder |> Placeholder.value, value)
+
+    open NodeOperators
+
+    let matchText (matchText: string) (cypher: CypherFluentQuery): CypherFluentQuery =
+        cypher.Match(matchText)
+
+    let matchNode nodeType nodeId (cypher: CypherFluentQuery): CypherFluentQuery =
+        matchText (nodeId @ nodeType) cypher
+
+    let fetchResults<'a> nodeId (cypher: CypherFluentQuery) =
+        cypher
+            .Return<'a>(nodeId |> NodeId.value)
+            .ResultsAsync
+        |> Async.AwaitTask
+        |> Async.map Seq.toList
 
     let addGraphNode node { Cypher = cypher }: CypherFluentQuery =
         let nodeId = node |> GraphQueryNode.id
@@ -104,8 +114,8 @@ module CypherFluentQuery =
             )
             .OnCreate()
             .Set(sprintf "%s = {%s}" (nodeId |> NodeId.value) (dtoPlaceholder |> Placeholder.value))
-            .WithParam(namePlaceholder |> Placeholder.value, node.Name |> Name.value)
-            .WithParam(dtoPlaceholder |> Placeholder.value, node.Dto)
+            <?=> (namePlaceholder => (node.Name |> Name.value))
+            <?=> (dtoPlaceholder => node.Dto)
 
     let private addUniqueLink link (query: CypherFluentQuery): CypherFluentQuery =
         query.CreateUnique(link)
@@ -117,22 +127,15 @@ module CypherFluentQuery =
             |> sprintf "skipped -> Asserting node exist %s"
             |> log.LogMessage
         | Execute ->
-            let id = nodeId |> NodeId.value
             let query =
-                client
-                    .Cypher
-                    .Match(
-                        (nodeId @<*> nodeType) (Name.Property => (name |> FormattedName.value))
-                    )
+                client.Cypher
+                |> matchText (
+                    (nodeId @<*> nodeType) (Name.Property => (name |> FormattedName.value))
+                )
 
             let results =
-                async {
-                    return!
-                        query
-                            .Return(id)
-                            .ResultsAsync
-                        |> Async.AwaitTask
-                }
+                query
+                |> fetchResults nodeId
                 |> Async.RunSynchronously
 
             if results |> Seq.isEmpty then
@@ -154,7 +157,8 @@ module CypherFluentQuery =
 
         { rawCypherQuery with
             Cypher =
-                rawCypherQuery.Cypher.Match (
+                rawCypherQuery.Cypher
+                |> matchText (
                     (nodeId @<*> nodeType) (Name.Property => (name |> FormattedName.value))
                 )
         }
