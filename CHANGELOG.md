@@ -2,6 +2,8 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+
+## 1.1.0 - 2020-01-28
 - Add more examples to Readme
 - Open `CypherFluentQuery.NodeOperators` as public
 - Add functions to `CypherFluentQuery` module:
@@ -13,5 +15,5 @@
     `NodeId.ofString`
     `NodeType.ofString` (_as alias of NodeType.create_)
 
-## 1.0.0
+## 1.0.0 - 2020-01-27
 - Initial implementation
