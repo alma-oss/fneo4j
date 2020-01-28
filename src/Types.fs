@@ -41,6 +41,9 @@ module NameModule =
 
         let value name = name |> format |> FormattedName.value
 
+        let ofString (name: string) =
+            Name (name, id)
+
 [<AutoOpen>]
 module LabelModule =
     type Format<'Value> = 'Value -> string
@@ -66,6 +69,8 @@ module NodeTypeModule =
         let create nodeType = NodeType [ nodeType ]
         let createMultiple = NodeType
 
+        let ofString = create
+
         let add (NodeType a) (NodeType b) = NodeType (a @ b)
 
         let private normalize (nodeType: string) = nodeType.ToUpper().Replace("*", "")
@@ -87,6 +92,8 @@ module NodeIdModule =
             |> List.map ((String.replaceAll [ ":"; ";"; "."; "@"; "#"; "&" ] "_") >> String.toLower >> String.ucFirst)
             |> String.concat ""
             |> NodeId
+
+        let ofString = NodeId
 
         let create nodeType name =
             ofValues [
