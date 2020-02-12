@@ -2,6 +2,8 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+
+## 1.2.0 - 2020-02-12
 - Add `CypherFluentQuery` functions:
     - `where`
     - `andWhere`
