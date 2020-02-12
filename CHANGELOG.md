@@ -2,6 +2,11 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Add `CypherFluentQuery` functions:
+    - `where`
+    - `andWhere`
+    - `orWhere`
+- Add `NodeId.empty` function
 
 ## 1.1.0 - 2020-01-28
 - Add more examples to Readme

@@ -91,6 +91,15 @@ module CypherFluentQuery =
     let matchText (matchText: string) (cypher: CypherFluentQuery): CypherFluentQuery =
         cypher.Match(matchText)
 
+    let where condition (cypher: CypherFluentQuery): CypherFluentQuery =
+        cypher.Where(condition)
+
+    let andWhere condition (cypher: CypherFluentQuery): CypherFluentQuery =
+        cypher.AndWhere(condition)
+
+    let orWhere condition (cypher: CypherFluentQuery): CypherFluentQuery =
+        cypher.OrWhere(condition)
+
     let matchNode nodeType nodeId (cypher: CypherFluentQuery): CypherFluentQuery =
         matchText (nodeId @ nodeType) cypher
 
