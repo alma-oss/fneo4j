@@ -103,6 +103,8 @@ module NodeIdModule =
 
         let value (NodeId nodeId) = nodeId.Replace("-", "").Replace("*", "Any")
 
+        let empty = ofString ""
+
 [<AutoOpen>]
 module LinkTypeModule =
     type LinkType = private LinkType of string
