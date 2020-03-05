@@ -65,13 +65,24 @@ module CypherFluentQuery =
                 (nodeId |> NodeId.value)
                 (nodeType |> NodeType.value)
 
-        /// Node with: (nodeId:TYPE { Field: "value" })
-        let (@<*>) nodeId nodeType (field, value) =
-            sprintf "(%s:%s { %s: \"%s\" })"
+        /// Node with: (nodeId:TYPE { Field1: "value1", Field2: "value2", ... })
+        let (@<***>) nodeId nodeType fields =
+            sprintf "(%s:%s { %s })"
                 (nodeId |> NodeId.value)
                 (nodeType |> NodeType.value)
-                (field |> PropertyName.value)
-                value
+                (
+                    fields
+                    |> List.map (fun (field, value) ->
+                        sprintf "%s: \"%s\""
+                            (field |> PropertyName.value)
+                            value
+                    )
+                    |> String.concat ", "
+                )
+
+        /// Node with: (nodeId:TYPE { Field: "value" })
+        let (@<*>) nodeId nodeType (field, value) =
+            (nodeId @<***> nodeType) [ (field, value) ]
 
         /// Node with: (nodeId:TYPE { Field: {placeholder} })
         /// You must set placeholder value to the query -> see (<?=>) below

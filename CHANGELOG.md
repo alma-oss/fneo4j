@@ -2,6 +2,7 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Add `CypherFluentQuery` operator `@<***>` to match a node by multiple fields
 
 ## 1.2.0 - 2020-02-12
 - Add `CypherFluentQuery` functions:
