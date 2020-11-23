@@ -1,23 +1,24 @@
 FROM dcreg.service.consul/dev/development-dotnet-core-sdk-common:3.1
 
 # build scripts
-COPY ./fake.sh /fneo4j/
-COPY ./build.fsx /fneo4j/
-COPY ./paket.dependencies /fneo4j/
-COPY ./paket.references /fneo4j/
-COPY ./paket.lock /fneo4j/
+COPY ./build.sh /lib/
+COPY ./build.fsx /lib/
+COPY ./paket.dependencies /lib/
+COPY ./paket.references /lib/
+COPY ./paket.lock /lib/
 
 # sources
-COPY ./Neo4j.fsproj /fneo4j/
-COPY ./src /fneo4j/src
+COPY ./Neo4j.fsproj /lib/
+COPY ./src /lib/src
 
 # others
-COPY ./.git /fneo4j/.git
-COPY ./CHANGELOG.md /fneo4j/
+COPY ./.git /lib/.git
+COPY ./.config /lib/.config
+COPY ./CHANGELOG.md /lib/
 
-WORKDIR /fneo4j
+WORKDIR /lib
 
 RUN \
-    ./fake.sh build target Build no-clean
+    ./build.sh -t Build no-clean
 
-CMD ["./fake.sh", "build", "target", "Tests", "no-clean"]
+CMD ["./build.sh", "-t", "Tests", "no-clean"]
