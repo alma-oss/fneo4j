@@ -3,11 +3,11 @@ framework: netcoreapp3.1
 source https://api.nuget.org/v3/index.json
 nuget FSharp.Core
 nuget FSharp.Data ~> 3.0
-nuget Neo4jClient 4.0.0.1-prerelease
+nuget Neo4jClient ~> 4.0
 
 git ssh://git@bitbucket.lmc.cz:7999/archi/nuget-server.git master Packages: /nuget/
 # LMC Nuget dependencies:
-nuget Lmc.ErrorHandling ~> 1.6
+nuget Lmc.ErrorHandling ~> 3.0
 
 // [ FAKE GROUP ]
 group Build

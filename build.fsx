@@ -14,7 +14,7 @@ type ToolDir =
     | Local of string
 
 // ========================================================================================================
-// === F# / Library fake build =============================================================== 2020-02-27 =
+// === F# / Library fake build ==================================================================== 1.1.0 =
 // --------------------------------------------------------------------------------------------------------
 // Options:
 //  - no-clean   - disables clean of dirs in the first step (required on CI)
@@ -31,7 +31,7 @@ type ToolDir =
 // 1. Information about the project to be used at NuGet and in AssemblyInfo files and other FAKE configuration
 // --------------------------------------------------------------------------------------------------------
 
-let project = "Neo4j"
+let project = "Lmc.Neo4j"
 let summary = "Library for communication with Neo4j graph database."
 
 let release = ReleaseNotes.parse (System.IO.File.ReadAllLines "CHANGELOG.md" |> Seq.filter ((<>) "## Unreleased"))
@@ -160,7 +160,7 @@ Target.create "Build" (fun _ ->
 )
 
 Target.create "Lint" <| skipOn "no-lint" (fun _ ->
-    DotnetCore.installOrUpdateTool toolsDir "dotnet-fsharplint"
+    DotnetCore.installOrUpdateTool toolsDir "dotnet-fsharplint --version 0.16.5"
 
     let checkResult (messages: string list) =
         let rec check: string list -> unit = function
@@ -176,6 +176,7 @@ Target.create "Lint" <| skipOn "no-lint" (fun _ ->
         |> check
 
     !! "**/*.fsproj"
+    -- "example/**/*.*proj"
     |> Seq.map (fun fsproj ->
         match toolsDir with
         | Global ->

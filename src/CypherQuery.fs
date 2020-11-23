@@ -1,5 +1,7 @@
 namespace Lmc.Neo4j
 
+open Lmc.ErrorHandling
+
 type CypherFluentQuery = Neo4jClient.Cypher.ICypherFluentQuery
 
 type CypherQueryText = CypherQueryText of string
