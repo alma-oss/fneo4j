@@ -3,6 +3,43 @@
         "userName": "neo4j",
         "password": "heslo",
         "host": "localhost",
-        "port": 7474
+        "port": 7474,
+        "version": 3
+    },
+    {
+        "userName": "neo4j",
+        "password": "heslo",
+        "host": "localhost",
+        "port": 7474,
+        "version": 3,
+        "type": "http"
+    },
+    {
+        "userName": "neo4j",
+        "password": "heslo",
+        "host": "localhost",
+        "port": 7687,
+        "version": 4,
+        "type": "bolt"
+    },
+    {
+        "userName": "neo4j",
+        "password": "heslo",
+        "host": "localhost",
+        "version": 3,
+        "type": "http"
+    },
+    {
+        "userName": "neo4j",
+        "password": "heslo",
+        "host": "localhost",
+        "version": 3
+    },
+    {
+        "userName": "neo4j",
+        "password": "heslo",
+        "host": "localhost",
+        "version": 4,
+        "type": "bolt"
     }
 ]

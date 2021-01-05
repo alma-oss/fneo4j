@@ -86,10 +86,10 @@ module CypherFluentQuery =
         let (@<*>) nodeId nodeType (field, value) =
             (nodeId @<***> nodeType) [ (field, value) ]
 
-        /// Node with: (nodeId:TYPE { Field: {placeholder} })
+        /// Node with: (nodeId:TYPE { Field: $placeholder })
         /// You must set placeholder value to the query -> see (<?=>) below
         let (@<?>) nodeId nodeType (field, placeholder) =
-            sprintf "(%s:%s { %s: {%s} })"
+            sprintf "(%s:%s { %s: $%s })"
                 (nodeId |> NodeId.value)
                 (nodeType |> NodeType.value)
                 (field |> PropertyName.value)
@@ -135,7 +135,7 @@ module CypherFluentQuery =
                 (nodeId @<?> node.Type) (Name.Property => namePlaceholder)
             )
             .OnCreate()
-            .Set(sprintf "%s = {%s}" (nodeId |> NodeId.value) (dtoPlaceholder |> Placeholder.value))
+            .Set(sprintf "%s = $%s" (nodeId |> NodeId.value) (dtoPlaceholder |> Placeholder.value))
             <?=> (namePlaceholder => (node.Name |> Name.value))
             <?=> (dtoPlaceholder => node.Dto)
 
@@ -211,21 +211,31 @@ module CypherError =
 module Cypher =
     open Result.Operators
 
+    (* 
+        using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        {
+            await client.Cypher.Create("(n:Tx {Name:'Test'})").ExecuteWithoutResultsAsync();
+            scope.Complete();
+        }
+     *)
+
     let private executeQuery { Cypher = cypher } =
         try
             cypher.ExecuteWithoutResultsAsync()
             |> Async.AwaitTask
+            |> AsyncResult.ofAsyncCatch (fun e -> RuntimeError (CypherQueryText cypher.Query.QueryText, e))
             |> Async.RunSynchronously
-            |> Ok
         with
         | error ->
             RuntimeError (CypherQueryText cypher.Query.QueryText, error)
             |> Error
 
+
+
     let private dumpQuery { LogQuery = log } { Cypher = cypher } =
         let parameters =
             cypher.Query.QueryParameters
-            |> Seq.map (fun kvPair -> sprintf "  - {%s} => %s" kvPair.Key (kvPair.Value |> Json.serialize))
+            |> Seq.map (fun kvPair -> sprintf "  - $%s => %s" kvPair.Key (kvPair.Value |> Json.serialize))
             |> Seq.toList
 
         log (CypherQueryText cypher.Query.QueryText) (CypherQueryParameters parameters)
@@ -265,11 +275,10 @@ type CypherQuery<'Value, 'Error> = CypherQuery of CypherQueryValue<'Value, 'Erro
 
 [<RequireQualifiedAccess>]
 module CypherQuery =
+    open Lmc.ErrorHandling.Result.Operators
+
     let ok toNode = CypherQuery (OkCypherQuery toNode)
     let result toNode = CypherQuery (ResultCypherQuery toNode)
-
-    let inline private (>!>) fR f = // todo - use from Result.Operators
-        fR >> Result.map f
 
     let fromNode toNode =
         CypherQuery (OkCypherQuery (toNode >> Cypher.fromNode))
@@ -285,8 +294,4 @@ module CypherQuery =
         | OkCypherQuery toCypher -> toCypher >> Ok
         | ResultCypherQuery toResultCypher -> toResultCypher
 
-    let private orFail = function   // todo - remove and use result everywhere?
-        | Ok option -> option
-        | Error e -> e |> failwith
-
-    let toCypher query = toCypherResult query >> orFail
+    let toCypher query = toCypherResult query >> Result.orFail
