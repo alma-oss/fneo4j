@@ -2,6 +2,8 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+
+## 3.0.0 - 2021-01-11
 - [**BC**] Add `Server` field to the Connection configuration
 - [**BC**] Change `Connection.parse` to return a `Result`
     - it also parse a `Server` fields
