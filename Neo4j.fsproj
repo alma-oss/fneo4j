@@ -15,9 +15,15 @@
 
   <ItemGroup>
     <Compile Include="src/Utils.fs" />
+
     <Compile Include="src/Client.fs" />
     <Compile Include="src/Types.fs" />
+
+    <Compile Include="src/CypherTypes.fs" />
+    <Compile Include="src/CypherFluentQuery.fs" />
+    <Compile Include="src/RawCypherQuery.fs" />
     <Compile Include="src/CypherQuery.fs" />
+
     <Compile Include="src/Dto.fs" />
   </ItemGroup>
 

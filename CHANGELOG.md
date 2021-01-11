@@ -2,6 +2,15 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- [**BC**] Add `Server` field to the Connection configuration
+- [**BC**] Change `Connection.parse` to return a `Result`
+    - it also parse a `Server` fields
+    - allow `port` field not to be set for default values (based on `connectionType`)
+- [**BC**] Remove `Connection.connectClient`
+- Add `Connection.connect` and `Connection.connectOrFail` functions
+- Change inner type of `Client.Connected` to the `IGraphClient`, so the Client.Connected could be both `BoltGraphClient` or `GraphClient`
+- [**BC**] Support Neo4j Server `4.x` only
+- [**BC**] Rename `CypherQuery.toCypherResult` to `CypherQuery.toCypher` and remove a previous `CypherQuery.toCypher` function
 
 ## 2.0.0 - 2020-11-23
 - [**BC**] Use .netcore 5.0
