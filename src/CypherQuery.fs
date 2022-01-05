@@ -32,8 +32,7 @@ module Cypher =
 
             return!
                 cypher.ExecuteWithoutResultsAsync()
-                |> Async.AwaitTask
-                |> AsyncResult.ofAsyncCatch (fun e -> RuntimeError (CypherRunableQuery.ofCypher cypher, e))
+                |> AsyncResult.ofEmptyTaskCatch (fun e -> RuntimeError (CypherRunableQuery.ofCypher cypher, e))
         }
         |> Async.RunSynchronously
         |> tee onAfter
