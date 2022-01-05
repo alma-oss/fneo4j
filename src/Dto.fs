@@ -3,7 +3,7 @@ namespace Lmc.Neo4j
 //
 // DTOs - must be public
 //
-module Dto =
+module public Dto =
     open Lmc.Neo4j
 
     // Common

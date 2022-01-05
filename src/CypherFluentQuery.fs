@@ -69,9 +69,11 @@ module CypherFluentQuery =
     let matchNode nodeType nodeId (cypher: CypherFluentQuery): CypherFluentQuery =
         matchText (nodeId @ nodeType) cypher
 
-    let fetchResults<'a> nodeId (cypher: CypherFluentQuery) =
-        cypher
-            .Return<'a>(nodeId |> NodeId.value)
-            .ResultsAsync
-        |> AsyncResult.ofTaskCatch id
-        |> AsyncResult.map Seq.toList
+    let fetchResults<'a> nodeId (cypher: CypherFluentQuery) = asyncResult {
+        let! results =
+            cypher
+                .Return<'a>(nodeId |> NodeId.value)
+                .ResultsAsync
+
+        return results |> Seq.toList
+    }

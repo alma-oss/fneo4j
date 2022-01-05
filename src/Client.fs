@@ -103,10 +103,7 @@ module Client =
                 | Neo4jServer.Http -> new Neo4jClient.GraphClient(uri, connection.UserName, connection.Password) :> Connected
                 | Neo4jServer.Bolt -> new Neo4jClient.BoltGraphClient(uri, connection.UserName, connection.Password) :> Connected
 
-            do!
-                client.ConnectAsync()
-                |> Async.AwaitTask
-                |> AsyncResult.ofAsyncCatch id
+            do! client.ConnectAsync()
 
             debug <| sprintf "Neo4j is connected: %A" client.IsConnected
 
