@@ -1,6 +1,6 @@
-namespace Lmc.Neo4j
+namespace Alma.Neo4j
 
-open Lmc.ErrorHandling
+open Alma.ErrorHandling
 
 [<RequireQualifiedAccess>]
 module Neo4jServer =
@@ -58,7 +58,7 @@ module Client =
     [<RequireQualifiedAccess>]
     module Connection =
         open FSharp.Data
-        open Lmc.ErrorHandling.Result.Operators
+        open Alma.ErrorHandling.Result.Operators
 
         let internal toBaseUrl { Host = host; Port = port; Server = server } =
             // see https://github.com/DotNet4Neo4j/Neo4jClient#graphclient

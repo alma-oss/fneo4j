@@ -1,10 +1,10 @@
-namespace Lmc.Neo4j
+namespace Alma.Neo4j
 
 //
 // DTOs - must be public
 //
 module public Dto =
-    open Lmc.Neo4j
+    open Alma.Neo4j
 
     // Common
 
