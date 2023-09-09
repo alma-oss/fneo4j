@@ -1,6 +1,6 @@
-namespace Lmc.Neo4j
+namespace Alma.Neo4j
 
-open Lmc.ErrorHandling
+open Alma.ErrorHandling
 
 type CypherFluentQuery = Neo4jClient.Cypher.ICypherFluentQuery
 

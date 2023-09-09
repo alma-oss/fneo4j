@@ -1,4 +1,4 @@
-namespace Lmc.Neo4j
+namespace Alma.Neo4j
 
 [<AutoOpen>]
 module internal Neo4jUtils =
