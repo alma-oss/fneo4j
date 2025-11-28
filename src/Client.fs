@@ -1,6 +1,6 @@
 namespace Alma.Neo4j
 
-open Alma.ErrorHandling
+open Feather.ErrorHandling
 
 [<RequireQualifiedAccess>]
 module Neo4jServer =
@@ -58,7 +58,7 @@ module Client =
     [<RequireQualifiedAccess>]
     module Connection =
         open FSharp.Data
-        open Alma.ErrorHandling.Result.Operators
+        open Feather.ErrorHandling.Result.Operators
 
         let internal toBaseUrl { Host = host; Port = port; Server = server } =
             // see https://github.com/DotNet4Neo4j/Neo4jClient#graphclient

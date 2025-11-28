@@ -1,6 +1,6 @@
 namespace Alma.Neo4j
 
-open Alma.ErrorHandling
+open Feather.ErrorHandling
 
 type CypherFluentQuery = Neo4jClient.Cypher.ICypherFluentQuery
 
