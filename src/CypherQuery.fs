@@ -1,6 +1,6 @@
 namespace Alma.Neo4j
 
-open Alma.ErrorHandling
+open Feather.ErrorHandling
 
 [<RequireQualifiedAccess>]
 type Cypher =
@@ -75,7 +75,7 @@ type CypherQuery<'Value, 'Error> = CypherQuery of ('Value -> Result<Cypher, 'Err
 
 [<RequireQualifiedAccess>]
 module CypherQuery =
-    open Alma.ErrorHandling.Result.Operators
+    open Feather.ErrorHandling.Result.Operators
 
     let ok toNode = CypherQuery (toNode >> Ok)
     let result toNode = CypherQuery toNode
