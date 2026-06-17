@@ -1,5 +1,9 @@
 # AGENTS.md — Alma.Neo4j
 
+## Agent Skills
+
+This repo ships Agent Skill for the `Alma.Neo4j` library. Compatible agents discover it automatically; see `.agents/skills/fneo4j/SKILL.md`.
+
 ## Project Purpose
 
 F# library providing a functional layer above the `Neo4jClient` .NET library for communicating with Neo4j graph databases. Includes a Cypher query DSL with fluent API, operator-based node matching, and typed query results. Published as NuGet package `Alma.Neo4j`.
