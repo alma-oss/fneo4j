@@ -1,0 +1,113 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/fneo4j
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/fneo4j/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1b6efe4b02dad6dbcbaa88d3025661da78ee406a93930e4599ebc7ccaa528aee
+- kind: project-relative
+  target: claude
+  value: .claude/skills/fneo4j/references/anti-patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:fd7d73a1d7447708e8817a6d144b318f2034ba16e1a17db569c9ced25c2397a4
+- kind: project-relative
+  target: claude
+  value: .claude/skills/fneo4j/references/examples.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9c6db95a00dea99a3d5e446a587c953771189ba3cb5ed06b8dd231f1ed03689a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/fneo4j/references/preferred-patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7a1d183a50cfce5dda910499ef5a3d3c5098c14b129ffab7828a31eb3ab812f9
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/fneo4j
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/fneo4j/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1b6efe4b02dad6dbcbaa88d3025661da78ee406a93930e4599ebc7ccaa528aee
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/fneo4j/references/anti-patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:fd7d73a1d7447708e8817a6d144b318f2034ba16e1a17db569c9ced25c2397a4
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/fneo4j/references/examples.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9c6db95a00dea99a3d5e446a587c953771189ba3cb5ed06b8dd231f1ed03689a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/fneo4j/references/preferred-patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7a1d183a50cfce5dda910499ef5a3d3c5098c14b129ffab7828a31eb3ab812f9
+local_deployed_files:
+- .agents/skills/fneo4j
+- .agents/skills/fneo4j/SKILL.md
+- .agents/skills/fneo4j/references/anti-patterns.md
+- .agents/skills/fneo4j/references/examples.md
+- .agents/skills/fneo4j/references/preferred-patterns.md
+- .claude/skills/fneo4j
+- .claude/skills/fneo4j/SKILL.md
+- .claude/skills/fneo4j/references/anti-patterns.md
+- .claude/skills/fneo4j/references/examples.md
+- .claude/skills/fneo4j/references/preferred-patterns.md
+local_deployed_file_hashes:
+  .agents/skills/fneo4j/SKILL.md: sha256:1b6efe4b02dad6dbcbaa88d3025661da78ee406a93930e4599ebc7ccaa528aee
+  .agents/skills/fneo4j/references/anti-patterns.md: sha256:fd7d73a1d7447708e8817a6d144b318f2034ba16e1a17db569c9ced25c2397a4
+  .agents/skills/fneo4j/references/examples.md: sha256:9c6db95a00dea99a3d5e446a587c953771189ba3cb5ed06b8dd231f1ed03689a
+  .agents/skills/fneo4j/references/preferred-patterns.md: sha256:7a1d183a50cfce5dda910499ef5a3d3c5098c14b129ffab7828a31eb3ab812f9
+  .claude/skills/fneo4j/SKILL.md: sha256:1b6efe4b02dad6dbcbaa88d3025661da78ee406a93930e4599ebc7ccaa528aee
+  .claude/skills/fneo4j/references/anti-patterns.md: sha256:fd7d73a1d7447708e8817a6d144b318f2034ba16e1a17db569c9ced25c2397a4
+  .claude/skills/fneo4j/references/examples.md: sha256:9c6db95a00dea99a3d5e446a587c953771189ba3cb5ed06b8dd231f1ed03689a
+  .claude/skills/fneo4j/references/preferred-patterns.md: sha256:7a1d183a50cfce5dda910499ef5a3d3c5098c14b129ffab7828a31eb3ab812f9
