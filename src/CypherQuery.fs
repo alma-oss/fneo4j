@@ -42,11 +42,13 @@ module Cypher =
         >>* (CypherRunableQuery.ofCypher >> log)
         <!> ignore
 
+    // fsharplint:disable-next-line EnsureTailCallDiagnosticsInRecursiveFunctions
     let rec dump log client = function
         | Cypher.RawQuery query -> query |> dumpQuery log <@> List.singleton
         | Cypher.Composition composition -> client |> RawCypherQuery.start (OutputOnly log) |> composition |> dumpQuery log <@> List.singleton
         | Cypher.Multi multi -> multi |> List.map (dump log client) |> AsyncResult.sequenceA <!> ignore
 
+    // fsharplint:disable-next-line EnsureTailCallDiagnosticsInRecursiveFunctions
     let rec execute client events = function
         | Cypher.RawQuery query -> query |> executeQuery events |> Validation.ofResult
         | Cypher.Composition composition -> client |> RawCypherQuery.start Execute |> composition |> executeQuery events |> Validation.ofResult
